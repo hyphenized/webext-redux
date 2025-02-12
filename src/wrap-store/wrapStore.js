@@ -144,6 +144,9 @@ export default ({ channelName = defaultOpts.channelName } = defaultOpts) => {
       });
     });
 
+    let lastMsgId = 0;
+    const getNextMessageId = () => `${Date.now()}-${lastMsgId++}`;
+
     let currentState = store.getState();
 
     const forceUpdate = (newState, diff) => {
@@ -152,6 +155,7 @@ export default ({ channelName = defaultOpts.channelName } = defaultOpts) => {
         type: PATCH_STATE_TYPE,
         payload: diff,
         channelName, // Notifying what store is broadcasting the state changes
+        messageId: getNextMessageId()
       });
     };
 
@@ -166,6 +170,7 @@ export default ({ channelName = defaultOpts.channelName } = defaultOpts) => {
           type: PATCH_STATE_TYPE,
           payload: diff,
           channelName, // Notifying what store is broadcasting the state changes
+          messageId: getNextMessageId()
         });
       }
     };
@@ -178,6 +183,7 @@ export default ({ channelName = defaultOpts.channelName } = defaultOpts) => {
       type: STATE_TYPE,
       payload: currentState,
       channelName, // Notifying what store is broadcasting the state changes
+      messageId: getNextMessageId()
     });
 
     /**

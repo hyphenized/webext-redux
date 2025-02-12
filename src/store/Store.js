@@ -86,10 +86,14 @@ class Store {
       );
     };
 
+    const messageIds = new Set();
+
     this.serializedPortListener(message => {
-      if (!message || message.channelName !== this.channelName) {
+      if (!message || message.channelName !== this.channelName || messageIds.has(message.messageId)) {
         return;
       }
+
+      messageIds.add(message.messageId);
 
       switch (message.type) {
         case STATE_TYPE:
